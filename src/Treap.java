@@ -34,34 +34,70 @@ public class Treap {
         return current;
     }
 
-//    public TreapNode deleteRec(int key, TreapNode current) {
-//        if (current == null) {
-//            return null;
-//        } else if (key < current.key) {
-//            deleteRec(key, current.left);
-//        } else if (key > current.key) {
-//            deleteRec(key, current.right);
-//        } else { // If key == current.key
-//            if (current.left == null && current.right == null) { // If current is a leaf
-//                if (current.parent.left == current) {
-//                    current.parent.left = null;
-//                } else {
-//                    current.parent.right = null;
-//                }
-//            }
-//        }
-//    }
+    public void delete(int key) {
+        root = deleteRec(key, root);
+    }
+
+    public TreapNode deleteRec(int key, TreapNode current) {
+        if (current == null) {
+            return null;
+        } else if (key < current.key) {
+            current.left = deleteRec(key, current.left);
+            return current;
+        } else if (key > current.key) {
+            current.right = deleteRec(key, current.right);
+            return current;
+        } else { // If key == current.key
+            if (current.left == null && current.right == null) { // If current is a leaf
+                return null;
+            } else if (current.left != null && current.right == null) { // If current has a left child
+                return current.left;
+            } else if (current.left == null) { // If current has a right child
+                return current.right;
+            } else { // current has two children
+                if (current.left.priority < current.right.priority) {
+                    RR_Rotate(current);
+                    TreapNode newRoot = current.parent;
+                    newRoot.left = deleteRec(key, current.left);
+                    return newRoot;
+                } else {
+                    LL_Rotate(current);
+                    TreapNode newRoot = current.parent;
+                    newRoot.right = deleteRec(key, current.right);
+                    return newRoot;
+                }
+            }
+        }
+    }
 
     public static void main(String[] args) {
         Treap treap1 = new Treap();
         treap1.insert(10);
-        treap1.insert(1);
-        treap1.insert(5);
         treap1.insert(20);
-//        TreePrinter.printNode(treap1.root);
+        treap1.insert(5);
+        treap1.insert(1);
+        System.out.println("Inserted 1, 5, 10, 20:");
+        TreePrinter.printNode(treap1.root);
+
+        treap1.delete(5);
+        System.out.println("Deleted 5:");
+        TreePrinter.printNode(treap1.root);
+
+        treap1.delete(10);
+        System.out.println("Deleted 10:");
+        TreePrinter.printNode(treap1.root);
+
+        treap1.delete(70);
+        System.out.println("Attempted to delete 70 (Not in tree):");
+        TreePrinter.printNode(treap1.root);
+
+        treap1.delete(20);
+        treap1.delete(1);
+        System.out.println("Deleted 20, 1:");
+        TreePrinter.printNode(treap1.root);
     }
 
-    // TODO: Fix Left rotate and right rotate to reassign parent value
+
     // We will use this image to guide our naming conventions
     //         A                                      B
     //        / \                                   /   \
@@ -73,7 +109,6 @@ public class Treap {
     public static TreapNode LL_Rotate(TreapNode A) {
         TreapNode B = A.left;
         TreapNode Br = B.right;
-        System.out.println("Left Rotation: A: " + A + " B: " + B);
 
         // Reorder children
         A.left = Br;
