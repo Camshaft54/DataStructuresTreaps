@@ -23,7 +23,7 @@ class TreePrinter {
         List<TreapNode> newNodes = new ArrayList<>();
         for (TreapNode node : nodes) {
             if (node != null) {
-                System.out.print(node.key);
+                System.out.print(node.key + " (" + node.priority + ")");
                 newNodes.add(node.left);
                 newNodes.add(node.right);
             } else {
