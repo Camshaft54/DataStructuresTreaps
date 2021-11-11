@@ -56,13 +56,13 @@ public class Treap {
                 return current.right;
             } else { // current has two children
                 if (current.left.priority < current.right.priority) {
+                    TreapNode newRoot = current.right;
                     RR_Rotate(current);
-                    TreapNode newRoot = current.parent;
                     newRoot.left = deleteRec(key, current.left);
                     return newRoot;
                 } else {
+                    TreapNode newRoot = current.left;
                     LL_Rotate(current);
-                    TreapNode newRoot = current.parent;
                     newRoot.right = deleteRec(key, current.right);
                     return newRoot;
                 }
