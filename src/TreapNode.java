@@ -7,11 +7,14 @@ public class TreapNode {
     int priority;
     TreapNode left;
     TreapNode right;
-    TreapNode parent;
 
-    public TreapNode(int key, TreapNode parent) {
-        this.parent = parent;
+    public TreapNode(int key) {
         this.key = key;
         this.priority = Math.abs(rand.nextInt());
+    }
+
+    public TreapNode(int key, int priority) {
+        this.key = key;
+        this.priority = priority;
     }
 }
