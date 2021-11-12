@@ -34,6 +34,19 @@ public class Treap {
         return current;
     }
 
+    public boolean search(int key) {
+        TreapNode currentNode = root;
+        while (currentNode != null && currentNode.key != key) {
+            currentNode = (key < currentNode.key) ? currentNode.left : currentNode.right;
+        }
+        if (currentNode != null) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     public void delete(int key) {
         root = deleteRec(key, root);
     }
@@ -76,6 +89,7 @@ public class Treap {
         treap1.insert(20);
         treap1.insert(5);
         treap1.insert(1);
+        treap1.insert(8);
         System.out.println("Inserted 1, 5, 10, 20:");
         TreePrinter.printNode(treap1.root);
 
@@ -95,6 +109,13 @@ public class Treap {
         treap1.delete(1);
         System.out.println("Deleted 20, 1:");
         TreePrinter.printNode(treap1.root);
+//        TreePrinter.printNode(treap1.root);
+        System.out.println(" ");
+        System.out.println("searching for so see if treap has index 5:");
+        System.out.println(treap1.search(5));
+        System.out.println(" ");
+        System.out.println("searching for so see if treap has index 8:");
+        System.out.println(treap1.search(8));
     }
 
 
