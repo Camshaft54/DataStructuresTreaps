@@ -6,32 +6,26 @@ public class Treap {
     }
 
     public void insert(int key) {
-        root = insertRec(key, root);
+        root = insertRec(root, new TreapNode(key));
     }
 
-    public TreapNode insertRec(int key, TreapNode current) {
-        if (current == null) {
-            return new TreapNode(key, null);
+    public TreapNode insertRec(TreapNode current, TreapNode newNode) {
+        int key = newNode.key;
+        if (current == null || key == current.key) {
+            return newNode;
         } else if (key < current.key) {
-            if (current.left == null) {
-                current.left = new TreapNode(key, current);
-            } else {
-                current.left = insertRec(key, current.left);
-            }
+            current.left = (current.left == null) ? newNode : insertRec(current.left, newNode);
             if (current.priority < current.left.priority) {
                 current = LL_Rotate(current);
             }
-        } else if (key > current.key) {
-            if (current.right == null) {
-                current.right = new TreapNode(key, current);
-            } else {
-                current.right = insertRec(key, current.right);
-            }
+            return current;
+        } else {
+            current.right = (current.right == null) ? newNode : insertRec(current.right, newNode);
             if (current.priority < current.right.priority) {
                 current = RR_Rotate(current);
             }
+            return current;
         }
-        return current;
     }
 
     public boolean search(int key) {
@@ -68,19 +62,28 @@ public class Treap {
             } else if (current.left == null) { // If current has a right child
                 return current.right;
             } else { // current has two children
+                TreapNode newRoot;
                 if (current.left.priority < current.right.priority) {
+                    newRoot = current.right;
                     RR_Rotate(current);
-                    TreapNode newRoot = current.parent;
                     newRoot.left = deleteRec(key, current.left);
-                    return newRoot;
                 } else {
+                    newRoot = current.left;
                     LL_Rotate(current);
-                    TreapNode newRoot = current.parent;
                     newRoot.right = deleteRec(key, current.right);
-                    return newRoot;
                 }
+                return newRoot;
             }
         }
+    }
+
+    public Treap[] splitTree(int key) {
+        root = insertRec(root, new TreapNode(key, Integer.MAX_VALUE));
+        Treap leftTreap = new Treap();
+        leftTreap.root = root.left;
+        Treap rightTreap = new Treap();
+        rightTreap.root = root.right;
+        return new Treap[]{leftTreap, rightTreap};
     }
 
     public static void main(String[] args) {
@@ -116,10 +119,26 @@ public class Treap {
         System.out.println(" ");
         System.out.println("searching for so see if treap has index 8:");
         System.out.println(treap1.search(8));
+        Treap treap2 = new Treap();
+        treap2.insert(3);
+        treap2.insert(16);
+        treap2.insert(87);
+        treap2.insert(9);
+        treap2.insert(10);
+        treap2.insert(1);
+        treap2.insert(48);
+        treap2.insert(92);
+        System.out.println("\n\nTreap 2 (1,3,9,10,16,48,87,97):");
+        TreePrinter.printNode(treap2.root);
+        Treap[] treapParts = treap2.splitTree(10);
+        System.out.println("Treap 2 after split at 10:");
+        TreePrinter.printNode(treap2.root);
+        System.out.println("Treap less than 10:");
+        TreePrinter.printNode(treapParts[0].root);
+        System.out.println("Treap greater than 10:");
+        TreePrinter.printNode(treapParts[1].root);
     }
 
-
-    // We will use this image to guide our naming conventions
     //         A                                      B
     //        / \                                   /   \
     //       B   Ar         LL_Rotate (A)          C      A
@@ -135,11 +154,11 @@ public class Treap {
         A.left = Br;
         B.right = A;
 
-        // Reassign parents
-        B.parent = A.parent;
-        A.parent = B;
-        if (Br != null)
-            Br.parent = A;
+//        // Reassign parents
+//        B.parent = A.parent;
+//        A.parent = B;
+//        if (Br != null)
+//            Br.parent = A;
 
         // Return new root
         return B;
@@ -160,11 +179,11 @@ public class Treap {
         A.right = Bl;
         B.left = A;
 
-        // Reassign parents
-        B.parent = A.parent;
-        A.parent = B;
-        if (Bl != null)
-            Bl.parent = A;
+//        // Reassign parents
+//        B.parent = A.parent;
+//        A.parent = B;
+//        if (Bl != null)
+//            Bl.parent = A;
 
         // Return new root
         return B;
