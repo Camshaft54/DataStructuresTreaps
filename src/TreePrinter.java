@@ -2,6 +2,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * From BST starter code (originally from https://stackoverflow.com/questions/4965335/how-to-print-binary-tree-diagram)
+ * Slightly adapted to print the key and priority of each node in the format "key (priority)"
+ */
 class TreePrinter {
     public static <T extends Comparable<?>> void printNode(TreapNode root) {
         int maxLevel = TreePrinter.maxLevel(root);
