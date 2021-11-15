@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 @SuppressWarnings("UnnecessaryLocalVariable")
@@ -43,6 +44,10 @@ public class Treap<T> {
             current = RR_Rotate(current);
 
         return current;
+    }
+
+    private void insertHash(HashMap<Integer, T> hash){
+        hash.forEach(this::insert);
     }
 
     /**
@@ -230,6 +235,19 @@ public class Treap<T> {
         treap1.insert(8, 800);
         System.out.println("Inserted 1, 5, 8, 10, 20:");
         TreePrinter.printNode(treap1.root);
+
+        // Hash Insertion
+        Treap<Integer> treapMap = new Treap<>();
+        HashMap hash =  new HashMap();
+        hash.put(15, 1);
+        hash.put(24, 2);
+        hash.put(45, 3);
+        hash.put(7, 4);
+        hash.put(26, 5);
+        treapMap.insertHash(hash);
+        System.out.println("\n\nTreapMap (15,24,45,7,26)");
+        TreePrinter.printNode(treapMap.root);
+
 
         // Get data
         System.out.println("\nGet data for 5:");
