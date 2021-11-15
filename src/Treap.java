@@ -238,7 +238,7 @@ public class Treap<T> {
 
         // Hash Insertion
         Treap<Integer> treapMap = new Treap<>();
-        HashMap hash =  new HashMap();
+        HashMap<Integer, Integer> hash =  new HashMap<>();
         hash.put(15, 1);
         hash.put(24, 2);
         hash.put(45, 3);
